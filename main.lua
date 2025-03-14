@@ -43,7 +43,7 @@ local guimoney = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIC
 local moneylabel = MainTab:CreateLabel(guimoney.Text, "pound-sterling", false) -- Title, Icon, Color, IgnoreTheme
 guimoney:GetPropertyChangedSignal("Text"):Connect(function()
     moneylabel:Set(guimoney.Text, "pound-sterling", false) -- Title, Icon, Color, IgnoreTheme
- end)
+end)
 
 -- health
 local healthbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.HealthBar.Bar
@@ -55,6 +55,7 @@ healthbar:GetPropertyChangedSignal("Size"):Connect(function()
     local formatted_health = string.format("%03d", healthbar_size)
     healthlabel:Set(formatted_health, "heart-pulse", false)
 end)
+
 -- hunger
 local hungerbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.HungerBar.Bar
 local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100) -- Convert to whole number
@@ -71,7 +72,7 @@ local team = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIConta
 local teamlabel = MainTab:CreateLabel(team.Text, "users-round", false)
 team:GetPropertyChangedSignal("Text"):Connect(function()
     teamlabel:Set(team.Text, "users-round", false) -- Title, Icon, Color, IgnoreTheme
- end)
+end)
 
 local Divider = MainTab:CreateDivider()
 
@@ -85,7 +86,7 @@ local playercountlabel = MainTab:CreateLabel(tostring(playerCount), "server", fa
 -- Function to update player count
 local function updatePlayerCount()
     local playerCount = #game.Players:GetPlayers()
-    playercountlabel:Set(playerCount, "server", false)
+    playercountlabel:Set(tostring(playerCount), "server", false)
 end
 
 updatePlayerCount()
@@ -94,6 +95,9 @@ game.Players.PlayerRemoving:Connect(updatePlayerCount)
 
 -- police and admin online
 local Teams = game:GetService("Teams") -- Define the Teams Service
+
+-- Initialize teamcountlabel
+local teamcountlabel = MainTab:CreateLabel("Initializing...", "scroll-text", false)
 
 local function updateTeamCounts()
     local civTeam = Teams["Civilian"]:GetPlayers()
@@ -123,16 +127,90 @@ updateTeamCounts()
 game.Players.PlayerAdded:Connect(updateTeamCounts)
 game.Players.PlayerRemoving:Connect(updateTeamCounts)
 
+-- admin online
+local Players = game:GetService("Players")
+
+-- modulescript with admin ids
+local adminIds_path = game:GetService("ReplicatedStorage").Config.Admins
+local adminIdArray = require(adminIds_path)
+
+local adminInfo = {}
+local adminsonline = 0
+local adminsoffline = 0
+
+-- Create the admin online label
+local adminonlinestring = "Administrators: " .. adminsonline
+local adminonlinelabel = MainTab:CreateLabel(adminonlinestring, "shield-half", false) -- Title, Icon, Color, IgnoreTheme
+
+-- Function to update the admin counts and info
+local function updateAdminCounts()
+    adminsonline = 0
+    adminsoffline = 0
+    for _, userId in ipairs(adminIdArray) do
+        local isInGame = false
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player.UserId == userId then
+                isInGame = true
+                break
+            end
+        end
+
+        -- Update the admin info
+        if adminInfo[userId] then
+            adminInfo[userId].InGame = isInGame
+        else
+            local success, username = pcall(function()
+                return Players:GetNameFromUserIdAsync(userId)
+            end)
+
+            if success then
+                adminInfo[userId] = {Name = username, InGame = isInGame}
+            else
+                warn("Failed to get name for ID:", userId)
+            end
+        end
+
+        -- Update counters
+        if isInGame then
+            adminsonline = adminsonline + 1
+        else
+            adminsoffline = adminsoffline + 1
+        end
+    end
+
+    -- Update the admin online label
+    local adminonlinestring = "Administrators: " .. adminsonline
+    adminonlinelabel:Set(adminonlinestring, "shield-half", false)
+end
+
+-- Initial update when script starts
+updateAdminCounts()
+
+-- Listen for changes in player status (player entering and leaving)
+Players.PlayerAdded:Connect(function(player)
+    -- Only update if the player is an admin
+    if table.find(adminIdArray, player.UserId) then
+        updateAdminCounts()
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    -- Only update if the player is an admin
+    if table.find(adminIdArray, player.UserId) then
+        updateAdminCounts()
+    end
+end)
+
 -- vehicle tab
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
 
-local plus10fuel = VehicleTab:CreateButton({
-    Name = "⚠️ Terminate",
+local addFuelButton = SystemTab:CreateButton({
+    Name = "Add Fuel",
     Callback = function()
         Rayfield:Destroy()
     end,
- })
+})
 
 -- system tab
 local SystemTab = Window:CreateTab("🖥️ System")
@@ -143,4 +221,4 @@ local Button = SystemTab:CreateButton({
     Callback = function()
         Rayfield:Destroy()
     end,
- })
+})
