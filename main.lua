@@ -263,6 +263,12 @@ Players.PlayerRemoving:Connect(function(player)
     end
 end)
 
+-- user/profile tab
+local UserTab = Window:CreateTab("👤 User")
+local HealthSection = UserTab:CreateSection("❤️ Health") -- health section
+
+local HungerSection = UserTab:CreateSection("🍽️ Hunger") -- hunger section
+
 -- vehicle tab
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
