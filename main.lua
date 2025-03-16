@@ -359,8 +359,6 @@ local Button = SystemTab:CreateButton({
     end,
 })
 
-local Divider = SystemTab:CreateDivider()
-
 -- Development Section
 -- I will test functions here
 local DevelopmentSection = SystemTab:CreateSection("👨‍💻 Development (Debugging)")
