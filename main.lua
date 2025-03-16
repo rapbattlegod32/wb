@@ -34,18 +34,74 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
+-- functions
+
+
+-- checks if an object called "A-Chassis Interface" is in the PlayerGui folder
+-- if player is in vehicle A-Chassis is in PlayerGui and if not there is no A-Chassis
+-- no A-Chassis = not in vehicle | A-Chassis = in vehicle
+local function checkIfInVehicle()
+    local AChassisInterface_Path = game:GetService("Players").LocalPlayer.PlayerGui
+
+    local inVehicle = nil
+
+    if AChassisInterface_Path:FindFirstChild('A-Chassis Interface') then -- in this case true
+        inVehicle = true
+    else
+        inVehicle = false
+    end
+
+    return inVehicle
+end
+
+local function GetVehicle()
+    local Player = game:GetService("Players").LocalPlayer
+    local name = Player.Name
+    local vehiclesFolder = game.Workspace:FindFirstChild("Vehicles")
+    local targetOwner = name
+
+    if vehiclesFolder then
+        for _, vehicle in pairs(vehiclesFolder:GetChildren()) do
+            if vehicle:IsA("Model") then
+                local vehicleName = vehicle.Name
+                local carBody = vehicle:FindFirstChild("Body")
+                local ownerValue = vehicle:FindFirstChild("Owner")
+                if ownerValue and ownerValue:IsA("ObjectValue") and ownerValue.Value and ownerValue.Value.Name == targetOwner then
+                    print("Vehicle found: " .. vehicle.Name)
+
+                    -- Find a model in the body that begins with "ARV"
+                    for _, part in pairs(carBody:GetChildren()) do
+                        if part:IsA("Model") and part.Name:sub(1, 3) == "ARV" then
+                            print("ARV model found: " .. part.Name)
+                            local ARV = part.Name
+                            return ARV
+                        end
+                    end
+
+                    break -- Stop searching once found
+                end
+                return vehicleName
+            end
+        end
+    else
+        warn("Vehicles folder not found")
+    end
+end
+
+
 -- main tab
 local MainTab = Window:CreateTab("🏡 Home", nil) -- Title, Image
-local MainSection = MainTab:CreateSection("Information")
+local FinancialInfoSection = MainTab:CreateSection("💸 Financial Info")
 
--- money statistic
+-- money label
 local guimoney = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.Balance
 local moneylabel = MainTab:CreateLabel(guimoney.Text, "pound-sterling", false) -- Title, Icon, Color, IgnoreTheme
 guimoney:GetPropertyChangedSignal("Text"):Connect(function()
     moneylabel:Set(guimoney.Text, "pound-sterling", false) -- Title, Icon, Color, IgnoreTheme
 end)
 
--- health
+local StatusInfoSection = MainTab:CreateSection("❤️ Status")
+-- health label
 local healthbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.HealthBar.Bar
 local healthbar_size = math.floor(healthbar.Size.X.Scale * 100) -- Convert to whole number
 local formatted_health = string.format("%03d", healthbar_size) -- Format as 3-digit
@@ -56,7 +112,7 @@ healthbar:GetPropertyChangedSignal("Size"):Connect(function()
     healthlabel:Set(formatted_health, "heart-pulse", false)
 end)
 
--- hunger
+-- hunger label
 local hungerbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.HungerBar.Bar
 local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100) -- Convert to whole number
 local formatted_hunger = string.format("%03d", hungerbar_size) -- Format as 3-digit
@@ -67,15 +123,17 @@ hungerbar:GetPropertyChangedSignal("Size"):Connect(function()
     hungerlabel:Set(formatted_hunger, "utensils", false)
 end)
 
--- team
+local TeamInfoSection = MainTab:CreateSection("🧑‍💼 Occupation")
+-- team label
 local team = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.Profile.Team
 local teamlabel = MainTab:CreateLabel(team.Text, "users-round", false)
 team:GetPropertyChangedSignal("Text"):Connect(function()
     teamlabel:Set(team.Text, "users-round", false) -- Title, Icon, Color, IgnoreTheme
 end)
 
-local Divider = MainTab:CreateDivider()
 
+local PlayerCountInfoSection = MainTab:CreateSection("🌐 Current Population")
+-- player count label
 -- Get the Players service
 local Players = game:GetService("Players")
 
@@ -93,7 +151,7 @@ updatePlayerCount()
 game.Players.PlayerAdded:Connect(updatePlayerCount)
 game.Players.PlayerRemoving:Connect(updatePlayerCount)
 
--- police and admin online
+-- civ/police/ambulance/fire/repair online label
 local Teams = game:GetService("Teams") -- Define the Teams Service
 
 -- Initialize teamcountlabel
@@ -127,7 +185,7 @@ updateTeamCounts()
 game.Players.PlayerAdded:Connect(updateTeamCounts)
 game.Players.PlayerRemoving:Connect(updateTeamCounts)
 
--- admin online
+-- administrators online label
 local Players = game:GetService("Players")
 
 -- modulescript with admin ids
@@ -205,12 +263,47 @@ end)
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
 
-local addFuelButton = SystemTab:CreateButton({
-    Name = "Add Fuel",
+local maxFuelButton = VehicleTab:CreateButton({
+    Name = "Max Fuel",
     Callback = function()
-        Rayfield:Destroy()
+        local inVehicle = checkIfInVehicle()
+        if inVehicle == true then
+            Rayfield:Notify({
+                Title = "In Vehicle",
+                Content = "You are now in a vehicle",
+                Duration = 3.5,
+                Image = "check",
+            })
+        elseif inVehicle == false then
+            Rayfield:Notify({
+                Title = "Not In Vehicle",
+                Content = "Get in a vehicle to use this function",
+                Duration = 3.5,
+                Image = "circle-alert",
+             })
+        end
     end,
 })
+
+local noFuelButton = VehicleTab:CreateButton({
+    Name = "No Fuel",
+    Callback = function()
+
+    end,
+})
+
+local Slider = VehicleTab:CreateSlider({
+    Name = "🔧 Adjust Fuel",
+    Range = {0, 10},
+    Increment = 1,
+    Suffix = "Fuel Level (%)",
+    CurrentValue = 10,
+    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+    -- The function that takes place when the slider changes
+    -- The variable (Value) is a number which correlates to the value the slider is currently at
+    end,
+ })
 
 -- system tab
 local SystemTab = Window:CreateTab("🖥️ System")
@@ -220,5 +313,34 @@ local Button = SystemTab:CreateButton({
     Name = "⚠️ Terminate",
     Callback = function()
         Rayfield:Destroy()
+    end,
+})
+
+
+-- Development Section
+-- I will test functions here
+local DevelopmentSection = SystemTab:CreateSection("👨‍💻 Development")
+
+local TestingNotificationLengthSlider = SystemTab:CreateSlider({
+    Name = "🎛️ Adjust Notification Length",
+    Range = {0, 10},
+    Increment = 0.1,
+    Suffix = "(Seconds)",
+    CurrentValue = 3.5,
+    Flag = "DevNotificationLengthSlider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        getgenv().DevNotificationLengthValue = Value
+    end,
+ })
+
+local TestingNotificationButton = SystemTab:CreateButton({
+    Name = "🔔 Notification",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "Notification",
+            Content = "This is a notification",
+            Duration = getgenv().DevNotificationLengthValue,
+            Image = "bell-ring",
+        })
     end,
 })
