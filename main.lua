@@ -54,12 +54,11 @@ local function checkIfInVehicle()
     return inVehicle
 end
 
-local function GetVehicle()
+local function getVehicleNameAndARV()
     local Player = game:GetService("Players").LocalPlayer
     local name = Player.Name
     local vehiclesFolder = game.Workspace:FindFirstChild("Vehicles")
     local targetOwner = name
-
     if vehiclesFolder then
         for _, vehicle in pairs(vehiclesFolder:GetChildren()) do
             if vehicle:IsA("Model") then
@@ -74,20 +73,19 @@ local function GetVehicle()
                         if part:IsA("Model") and part.Name:sub(1, 3) == "ARV" then
                             print("ARV model found: " .. part.Name)
                             local ARV = part.Name
-                            return ARV
+                            return vehicleName, ARV
                         end
                     end
 
                     break -- Stop searching once found
                 end
-                return vehicleName
             end
         end
     else
         warn("Vehicles folder not found")
     end
+    return nil, nil
 end
-
 
 -- main tab
 local MainTab = Window:CreateTab("🏡 Home", nil) -- Title, Image
@@ -268,11 +266,20 @@ local maxFuelButton = VehicleTab:CreateButton({
     Callback = function()
         local inVehicle = checkIfInVehicle()
         if inVehicle == true then
+            local vehicleName, ARV = getVehicleNameAndARV()
+            local args = {
+                [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
+                [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV):WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+                [3] = 10
+            }
+            
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StoreFuel"):FireServer(unpack(args))
+
             Rayfield:Notify({
-                Title = "In Vehicle",
-                Content = "You are now in a vehicle",
+                Title = "Added Fuel",
+                Content = "You have successfully added fuel to your vehicle.",
                 Duration = 3.5,
-                Image = "check",
+                Image = "fuel",
             })
         elseif inVehicle == false then
             Rayfield:Notify({
@@ -288,20 +295,50 @@ local maxFuelButton = VehicleTab:CreateButton({
 local noFuelButton = VehicleTab:CreateButton({
     Name = "No Fuel",
     Callback = function()
+        local inVehicle = checkIfInVehicle()
+        if inVehicle == true then
+            local vehicleName, ARV = getVehicleNameAndARV()
+            local args = {
+                [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
+                [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV):WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+                [3] = 0
+            }
+            
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StoreFuel"):FireServer(unpack(args))
 
+            Rayfield:Notify({
+                Title = "Removed Fuel",
+                Content = "You have successfully removed fuel from your vehicle.",
+                Duration = 3.5,
+                Image = "fuel",
+            })
+        elseif inVehicle == false then
+            Rayfield:Notify({
+                Title = "Not In Vehicle",
+                Content = "Get in a vehicle to use this function",
+                Duration = 3.5,
+                Image = "circle-alert",
+             })
+        end
     end,
 })
 
-local Slider = VehicleTab:CreateSlider({
+local fuelslider = VehicleTab:CreateSlider({
     Name = "🔧 Adjust Fuel",
     Range = {0, 10},
-    Increment = 1,
-    Suffix = "Fuel Level (%)",
+    Increment = 0.1,
+    Suffix = "Fuel Level (/10)",
     CurrentValue = 10,
-    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "fuelslider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
-    -- The function that takes place when the slider changes
-    -- The variable (Value) is a number which correlates to the value the slider is currently at
+        local vehicleName, ARV = getVehicleNameAndARV()
+        local args = {
+            [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
+            [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV):WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+            [3] = Value
+        }
+        
+        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StoreFuel"):FireServer(unpack(args))
     end,
  })
 
@@ -341,6 +378,44 @@ local TestingNotificationButton = SystemTab:CreateButton({
             Content = "This is a notification",
             Duration = getgenv().DevNotificationLengthValue,
             Image = "bell-ring",
+        })
+    end,
+})
+
+local Divider = SystemTab:CreateDivider()
+
+local checkIfInVehicleButton = SystemTab:CreateButton({
+    Name = "🚗 Check If In Vehicle",
+    Callback = function()
+        local inVehicle = checkIfInVehicle()
+        if inVehicle == true then
+            Rayfield:Notify({
+                Title = "Vehicle Status",
+                Content = "You are in a vehicle.",
+                Duration = 3.5,
+                Image = "car",
+            })
+        elseif inVehicle == false then
+            Rayfield:Notify({
+                Title = "Vehicle Status",
+                Content = "You are not in a vehicle.",
+                Duration = 3.5,
+                Image = "car",
+            })
+        end
+    end,
+})
+
+
+local GetVehicleButton = SystemTab:CreateButton({
+    Name = "📃 Get Current Vehicle Info",
+    Callback = function()
+        local vehicleName, ARV = getVehicleNameAndARV()
+        Rayfield:Notify({
+            Title = vehicleName,
+            Content = ARV,
+            Duration = 3.5,
+            Image = "car",
         })
     end,
 })
