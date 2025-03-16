@@ -202,6 +202,8 @@ local adminonlinelabel = MainTab:CreateLabel(adminonlinestring, "shield-half", f
 local function updateAdminCounts()
     adminsonline = 0
     adminsoffline = 0
+    local onlineAdmins = {}
+
     for _, userId in ipairs(adminIdArray) do
         local isInGame = false
         for _, player in ipairs(Players:GetPlayers()) do
@@ -226,9 +228,10 @@ local function updateAdminCounts()
             end
         end
 
-        -- Update counters
+        -- Update counters and collect online admin names
         if isInGame then
             adminsonline = adminsonline + 1
+            table.insert(onlineAdmins, adminInfo[userId].Name)
         else
             adminsoffline = adminsoffline + 1
         end
@@ -236,6 +239,9 @@ local function updateAdminCounts()
 
     -- Update the admin online label
     local adminonlinestring = "Administrators: " .. adminsonline
+    if #onlineAdmins > 0 then
+        adminonlinestring = adminonlinestring .. " (" .. table.concat(onlineAdmins, ", ") .. ")"
+    end
     adminonlinelabel:Set(adminonlinestring, "shield-half", false)
 end
 
@@ -353,10 +359,11 @@ local Button = SystemTab:CreateButton({
     end,
 })
 
+local Divider = SystemTab:CreateDivider()
 
 -- Development Section
 -- I will test functions here
-local DevelopmentSection = SystemTab:CreateSection("👨‍💻 Development")
+local DevelopmentSection = SystemTab:CreateSection("👨‍💻 Development (Debugging)")
 
 local TestingNotificationLengthSlider = SystemTab:CreateSlider({
     Name = "🎛️ Adjust Notification Length",
@@ -381,8 +388,6 @@ local TestingNotificationButton = SystemTab:CreateButton({
         })
     end,
 })
-
-local Divider = SystemTab:CreateDivider()
 
 local checkIfInVehicleButton = SystemTab:CreateButton({
     Name = "🚗 Check If In Vehicle",
