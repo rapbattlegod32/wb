@@ -284,14 +284,14 @@ local maxFuelButton = VehicleTab:CreateButton({
             Rayfield:Notify({
                 Title = "Added Fuel",
                 Content = "You have successfully added fuel to your vehicle.",
-                Duration = 3.5,
+                Duration = getgenv().NotificationlengthValue,
                 Image = "fuel",
             })
         elseif inVehicle == false then
             Rayfield:Notify({
                 Title = "Not In Vehicle",
                 Content = "Get in a vehicle to use this function",
-                Duration = 3.5,
+                Duration = getgenv().NotificationlengthValue,
                 Image = "circle-alert",
              })
         end
@@ -315,14 +315,14 @@ local noFuelButton = VehicleTab:CreateButton({
             Rayfield:Notify({
                 Title = "Removed Fuel",
                 Content = "You have successfully removed fuel from your vehicle.",
-                Duration = 3.5,
+                Duration = getgenv().NotificationlengthValue,
                 Image = "fuel",
             })
         elseif inVehicle == false then
             Rayfield:Notify({
                 Title = "Not In Vehicle",
                 Content = "Get in a vehicle to use this function",
-                Duration = 3.5,
+                Duration = getgenv().NotificationlengthValue,
                 Image = "circle-alert",
              })
         end
@@ -359,11 +359,7 @@ local Button = SystemTab:CreateButton({
     end,
 })
 
--- Development Section
--- I will test functions here
-local DevelopmentSection = SystemTab:CreateSection("👨‍💻 Development (Debugging)")
-
-local TestingNotificationLengthSlider = SystemTab:CreateSlider({
+local NotificationLengthSlider = SystemTab:CreateSlider({
     Name = "🎛️ Adjust Notification Length",
     Range = {0, 10},
     Increment = 0.1,
@@ -371,9 +367,13 @@ local TestingNotificationLengthSlider = SystemTab:CreateSlider({
     CurrentValue = 3.5,
     Flag = "DevNotificationLengthSlider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
-        getgenv().DevNotificationLengthValue = Value
+        getgenv().NotificationlengthValue = Value
     end,
  })
+
+-- Development Section
+-- I will test functions here
+local DevelopmentSection = SystemTab:CreateSection("👨‍💻 Development (Debugging)")
 
 local TestingNotificationButton = SystemTab:CreateButton({
     Name = "🔔 Notification",
@@ -381,7 +381,7 @@ local TestingNotificationButton = SystemTab:CreateButton({
         Rayfield:Notify({
             Title = "Notification",
             Content = "This is a notification",
-            Duration = getgenv().DevNotificationLengthValue,
+            Duration = getgenv().NotificationlengthValue,
             Image = "bell-ring",
         })
     end,
@@ -395,14 +395,14 @@ local checkIfInVehicleButton = SystemTab:CreateButton({
             Rayfield:Notify({
                 Title = "Vehicle Status",
                 Content = "You are in a vehicle.",
-                Duration = 3.5,
+                Duration = getgenv().NotificationlengthValue,
                 Image = "car",
             })
         elseif inVehicle == false then
             Rayfield:Notify({
                 Title = "Vehicle Status",
                 Content = "You are not in a vehicle.",
-                Duration = 3.5,
+                Duration = getgenv().NotificationlengthValue,
                 Image = "car",
             })
         end
@@ -417,7 +417,7 @@ local GetVehicleButton = SystemTab:CreateButton({
         Rayfield:Notify({
             Title = vehicleName,
             Content = ARV,
-            Duration = 3.5,
+            Duration = getgenv().NotificationlengthValue,
             Image = "car",
         })
     end,
