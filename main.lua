@@ -41,17 +41,17 @@ local Window = Rayfield:CreateWindow({
 -- if player is in vehicle A-Chassis is in PlayerGui and if not there is no A-Chassis
 -- no A-Chassis = not in vehicle | A-Chassis = in vehicle
 local function checkIfInVehicle()
-    local AChassisInterface_Path = game:GetService("Players").LocalPlayer.PlayerGui
+    local vehicleGui = game:GetService("Players").LocalPlayer.PlayerGui
 
-    local inVehicle = nil
+    local inVehicle = false
 
-    if AChassisInterface_Path:FindFirstChild('A-Chassis Interface') then -- in this case true
+    if vehicleGui:FindFirstChild('A-Chassis Interface') or vehicleGui:FindFirstChild('Interface') then -- in this case true
         inVehicle = true
+        return inVehicle
     else
         inVehicle = false
+        return inVehicle
     end
-
-    return inVehicle
 end
 
 local function getVehicleNameAndARV()
@@ -85,6 +85,37 @@ local function getVehicleNameAndARV()
         warn("Vehicles folder not found")
     end
     return nil, nil
+end
+
+local function doesClientVehicleExist()
+    local vehicleName = getVehicleNameAndARV()
+    local doesVehicleExist = false
+    if vehicleName == nil or false then
+        doesVehicleExist = false
+        return doesVehicleExist
+    else
+        doesVehicleExist = true
+        return doesVehicleExist
+    end
+end
+
+local function ClientVehicleExistNotification()
+    local doesVehicleExist = doesClientVehicleExist()
+    if doesVehicleExist == true then
+        Rayfield:Notify({
+            Title = "Vehicle Exist Status",
+            Content = "You have a vehicle",
+            Duration = getgenv().NotificationlengthValue,
+            Image = "car",
+        })
+    elseif doesVehicleExist == false then
+        Rayfield:Notify({
+            Title = "Vehicle Exist Status",
+            Content = "You do not have a vehicle",
+            Duration = getgenv().NotificationlengthValue,
+            Image = "car",
+        })
+    end
 end
 
 -- main tab
@@ -270,6 +301,9 @@ local HealthSection = UserTab:CreateSection("❤️ Health") -- health section
 local HungerSection = UserTab:CreateSection("🍽️ Hunger") -- hunger section
 
 -- vehicle tab
+local vehicleName = getVehicleNameAndARV()
+
+
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
 
@@ -426,5 +460,12 @@ local GetVehicleButton = SystemTab:CreateButton({
             Duration = getgenv().NotificationlengthValue,
             Image = "car",
         })
+    end,
+})
+
+local checkIfClientVehicleExist = SystemTab:CreateButton({
+    Name = "🔍 Check If Client Vehicle Exists",
+    Callback = function()
+        ClientVehicleExistNotification()
     end,
 })
