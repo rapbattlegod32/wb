@@ -423,6 +423,22 @@ local LockVehicleButton = VehicleTab:CreateButton({
             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("LockCar"):FireServer(unpack(args))
         end
         lockVehicle()
+        task.wait()
+        if vehicleLock.Value == true then
+            Rayfield:Notify({
+                Title = "Vehicle Lock Status",
+                Content = "Unlocked " .. vehicleName,
+                Duration = getgenv().NotificationlengthValue,
+                Image = "lock-keyhole-open",
+            })
+        elseif vehicleLock.Value == false then
+            Rayfield:Notify({
+                Title = "Vehicle Lock Status",
+                Content = "Locked " .. vehicleName,
+                Duration = getgenv().NotificationlengthValue,
+                Image = "lock-keyhole",
+            })
+        end
     end,
 })
 -- system tab
