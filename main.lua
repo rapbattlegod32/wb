@@ -408,6 +408,23 @@ local fuelslider = VehicleTab:CreateSlider({
     end,
  })
 
+local VehicleLockSection = VehicleTab:CreateSection("🔑 Lock Controls")
+
+local LockVehicleButton = VehicleTab:CreateButton({
+    Name = "🔐 Lock Vehicle",
+    Callback = function()
+        local vehicleName = getVehicleNameAndARV()
+        local vehicleLock = workspace.Vehicles[vehicleName].Lock
+        local function lockVehicle()
+            local args = {
+                [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName)
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("LockCar"):FireServer(unpack(args))
+        end
+        lockVehicle()
+    end,
+})
 -- system tab
 local SystemTab = Window:CreateTab("🖥️ System")
 local SystemControls = SystemTab:CreateSection("⚙️ System Controls")
