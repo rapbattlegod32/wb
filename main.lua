@@ -300,10 +300,30 @@ local HealthSection = UserTab:CreateSection("❤️ Health") -- health section
 
 local HungerSection = UserTab:CreateSection("🍽️ Hunger") -- hunger section
 
+local AvatarSection = UserTab:CreateSection("🤵 Avatar") -- hunger section
+-- met helmet
+local Button = UserTab:CreateButton({
+    Name = "👮 MET Helmet",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local Workspace = game:GetService("Workspace")
+
+        local Player = Players.LocalPlayer
+        local character = Player.Character or Player.CharacterAdded:Wait()
+
+        local user = character:WaitForChild("LeftLowerLeg")
+        local MetHelmet = Workspace:FindFirstChild("MET")
+        local TargetPart = MetHelmet and MetHelmet:FindFirstChild("Head")
+
+        if TargetPart and user then
+            firetouchinterest(user, TargetPart, 0)
+            task.wait(0.1)
+            firetouchinterest(user, TargetPart, 1)
+        end
+    end,
+})
+
 -- vehicle tab
-local vehicleName = getVehicleNameAndARV()
-
-
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
 
@@ -405,7 +425,7 @@ local NotificationLengthSlider = SystemTab:CreateSlider({
     Increment = 0.1,
     Suffix = "(Seconds)",
     CurrentValue = 3.5,
-    Flag = "DevNotificationLengthSlider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "NotificationLengthSlider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
         getgenv().NotificationlengthValue = Value
     end,
