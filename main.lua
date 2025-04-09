@@ -192,6 +192,7 @@ local function updateTeamCounts()
     local westbridgeBouroughCouncilTeam = Teams["Westbridge Borough Council"]:GetPlayers()
     local metropolitanPoliceServiceTeam = Teams["Metropolitan Police Service"]:GetPlayers()
     local britishArmedForcesTeam = Teams["British Armed Forces"]:GetPlayers()
+    local ministryOfDefencePolice = Teams["Ministry of Defence Police"]:GetPlayers()
     local londonAmbulanceServiceTeam = Teams["London Ambulance Service"]:GetPlayers()
     local londonFireBrigadeTeam = Teams["London Fire Brigade"]:GetPlayers()
     local racTeam = Teams["RAC"]:GetPlayers()
@@ -202,7 +203,7 @@ local function updateTeamCounts()
     local totalPoliceTeam = #metropolitanPoliceServiceTeam + #royalMilitaryPoliceTeam
 
     local teamString = "Civilians: " .. #civTeam ..
-        " | Police: " .. totalPoliceTeam ..
+        " | Police: " .. totalPoliceTeam .. " (MET: " .. #metropolitanPoliceServiceTeam .. ", RMP: " .. #royalMilitaryPoliceTeam.. ", MODP: " .. #ministryOfDefencePolice .. ")" ..
         " | Ambulance: " .. #londonAmbulanceServiceTeam ..
         " | Fire: " .. #londonFireBrigadeTeam ..
         " | Repair: " .. totalRepairTeam
