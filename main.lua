@@ -17,9 +17,9 @@ local Window = Rayfield:CreateWindow({
     },
 
     Discord = {
-        Enabled = false,     -- Prompt the user to join your Discord server if their executor supports it
+        Enabled = false,       -- Prompt the user to join your Discord server if their executor supports it
         Invite = "e3knAyNqvR", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-        RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+        RememberJoins = true   -- Set this to false to make them join the discord every time they load it up
     },
 
     KeySystem = false, -- Set this to true to use our key system
@@ -27,10 +27,10 @@ local Window = Rayfield:CreateWindow({
         Title = "Untitled",
         Subtitle = "Key System",
         Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-        FileName = "Key",                                  -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-        SaveKey = true,                                    -- The user's key will be saved, but if you change the key, they will be unable to use your script
-        GrabKeyFromSite = false,                           -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-        Key = { "Hello" }                                  -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+        FileName = "Key",                                    -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+        SaveKey = true,                                      -- The user's key will be saved, but if you change the key, they will be unable to use your script
+        GrabKeyFromSite = false,                             -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+        Key = { "Hello" }                                    -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
     }
 })
 
@@ -203,7 +203,11 @@ local function updateTeamCounts()
     local totalPoliceTeam = #metropolitanPoliceServiceTeam + #royalMilitaryPoliceTeam
 
     local teamString = "Civilians: " .. #civTeam ..
-        " | Police: " .. totalPoliceTeam .. " (MET: " .. #metropolitanPoliceServiceTeam .. ", RMP: " .. #royalMilitaryPoliceTeam.. ", MODP: " .. #ministryOfDefencePolice .. ")" ..
+        " | Police: " ..
+        totalPoliceTeam ..
+        " (MET: " ..
+        #metropolitanPoliceServiceTeam ..
+        ", RMP: " .. #royalMilitaryPoliceTeam .. ", MODP: " .. #ministryOfDefencePolice .. ")" ..
         " | Ambulance: " .. #londonAmbulanceServiceTeam ..
         " | Fire: " .. #londonFireBrigadeTeam ..
         " | Repair: " .. totalRepairTeam
@@ -342,7 +346,7 @@ local maxFuelButton = VehicleTab:CreateButton({
             local args = {
                 [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
                 [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV)
-                :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+                    :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
                 [3] = 10
             }
 
@@ -374,7 +378,7 @@ local noFuelButton = VehicleTab:CreateButton({
             local args = {
                 [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
                 [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV)
-                :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+                    :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
                 [3] = 0
             }
 
@@ -409,7 +413,7 @@ local fuelslider = VehicleTab:CreateSlider({
         local args = {
             [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
             [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV)
-            :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+                :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
             [3] = Value
         }
 
@@ -447,6 +451,50 @@ local LockVehicleButton = VehicleTab:CreateButton({
                 Duration = getgenv().NotificationlengthValue,
                 Image = "lock-keyhole",
             })
+        end
+    end,
+})
+
+local BrakesSection = VehicleTab:CreateSection("🛑 Brakes")
+
+local UIS = game:GetService("UserInputService")
+
+local inputBeganConnection
+local inputEndedConnection
+
+local StrongerBrakeToggle = VehicleTab:CreateToggle({
+    Name = "Stronger Brakes",
+    CurrentValue = false,
+    Flag = "StrongerBrakes",
+    Callback = function(Value)
+        if Value then
+            inputBeganConnection = UIS.InputBegan:Connect(function(input, gameProcessed)
+                if not gameProcessed then
+                    if input.KeyCode == Enum.KeyCode.S then
+                        keypress(0x50)
+                    end
+                end
+            end)
+
+            inputEndedConnection = UIS.InputEnded:Connect(function(input, gameProcessed)
+                if not gameProcessed then
+                    if input.KeyCode == Enum.KeyCode.S then
+                        keyrelease(0x50)
+                    end
+                end
+            end)
+        else
+            if inputBeganConnection then
+                inputBeganConnection:Disconnect()
+                inputBeganConnection = nil
+                secureprint("InputBegan connection disconnected")
+            end
+            
+            if inputEndedConnection then
+                inputEndedConnection:Disconnect()
+                inputEndedConnection = nil
+                secureprint("InputEnded connection disconnected")
+            end
         end
     end,
 })
