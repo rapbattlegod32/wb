@@ -1,37 +1,37 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))() 
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "Westbridge Script",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "giga.ae Hub",
-   LoadingSubtitle = "by giga.ae",
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+    Name = "Westbridge Script",
+    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+    LoadingTitle = "giga.ae Hub",
+    LoadingSubtitle = "by giga.ae",
+    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
 
-   ConfigurationSaving = {
-      Enabled = false,
-      FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "giga.aeHub"
-   },
+    ConfigurationSaving = {
+        Enabled = false,
+        FolderName = nil, -- Create a custom folder for your hub/game
+        FileName = "giga.aeHub"
+    },
 
-   Discord = {
-      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-      Invite = "e3knAyNqvR", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-   },
+    Discord = {
+        Enabled = false,     -- Prompt the user to join your Discord server if their executor supports it
+        Invite = "e3knAyNqvR", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+        RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+    },
 
-   KeySystem = false, -- Set this to true to use our key system
-   KeySettings = {
-      Title = "Untitled",
-      Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
-   }
+    KeySystem = false, -- Set this to true to use our key system
+    KeySettings = {
+        Title = "Untitled",
+        Subtitle = "Key System",
+        Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+        FileName = "Key",                                  -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+        SaveKey = true,                                    -- The user's key will be saved, but if you change the key, they will be unable to use your script
+        GrabKeyFromSite = false,                           -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+        Key = { "Hello" }                                  -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+    }
 })
 
 -- functions
@@ -126,14 +126,14 @@ local FinancialInfoSection = MainTab:CreateSection("💸 Financial Info")
 local guimoney = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.Balance
 local moneylabel = MainTab:CreateLabel(guimoney.Text, "pound-sterling", false) -- Title, Icon, Color, IgnoreTheme
 guimoney:GetPropertyChangedSignal("Text"):Connect(function()
-    moneylabel:Set(guimoney.Text, "pound-sterling", false) -- Title, Icon, Color, IgnoreTheme
+    moneylabel:Set(guimoney.Text, "pound-sterling", false)                     -- Title, Icon, Color, IgnoreTheme
 end)
 
 local StatusInfoSection = MainTab:CreateSection("❤️ Status")
 -- health label
 local healthbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.HealthBar.Bar
-local healthbar_size = math.floor(healthbar.Size.X.Scale * 100) -- Convert to whole number
-local formatted_health = string.format("%03d", healthbar_size) -- Format as 3-digit
+local healthbar_size = math.floor(healthbar.Size.X.Scale * 100)                 -- Convert to whole number
+local formatted_health = string.format("%03d", healthbar_size)                  -- Format as 3-digit
 local healthlabel = MainTab:CreateLabel(formatted_health, "heart-pulse", false) -- Title, Icon, Color, IgnoreTheme
 healthbar:GetPropertyChangedSignal("Size"):Connect(function()
     local healthbar_size = math.floor(healthbar.Size.X.Scale * 100)
@@ -143,8 +143,8 @@ end)
 
 -- hunger label
 local hungerbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.HungerBar.Bar
-local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100) -- Convert to whole number
-local formatted_hunger = string.format("%03d", hungerbar_size) -- Format as 3-digit
+local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100)              -- Convert to whole number
+local formatted_hunger = string.format("%03d", hungerbar_size)               -- Format as 3-digit
 local hungerlabel = MainTab:CreateLabel(formatted_hunger, "utensils", false) -- Title, Icon, Color, IgnoreTheme
 hungerbar:GetPropertyChangedSignal("Size"):Connect(function()
     local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100)
@@ -199,13 +199,13 @@ local function updateTeamCounts()
     local jackboysTeam = Teams["Jackboys"]:GetPlayers()
 
     local totalRepairTeam = #jackboysTeam + #aATeam + #racTeam
-    local totalPoliceTeam = #metropolitanPoliceServiceTeam + #royalMilitaryPoliceTeam 
+    local totalPoliceTeam = #metropolitanPoliceServiceTeam + #royalMilitaryPoliceTeam
 
     local teamString = "Civilians: " .. #civTeam ..
-                       " | Police: " .. totalPoliceTeam ..
-                       " | Ambulance: " .. #londonAmbulanceServiceTeam ..
-                       " | Fire: " .. #londonFireBrigadeTeam ..
-                       " | Repair: " .. totalRepairTeam
+        " | Police: " .. totalPoliceTeam ..
+        " | Ambulance: " .. #londonAmbulanceServiceTeam ..
+        " | Fire: " .. #londonFireBrigadeTeam ..
+        " | Repair: " .. totalRepairTeam
 
     teamcountlabel:Set(teamString, "scroll-text", false)
 end
@@ -253,7 +253,7 @@ local function updateAdminCounts()
             end)
 
             if success then
-                adminInfo[userId] = {Name = username, InGame = isInGame}
+                adminInfo[userId] = { Name = username, InGame = isInGame }
             else
                 warn("Failed to get name for ID:", userId)
             end
@@ -297,7 +297,12 @@ end)
 -- user/profile tab
 local UserTab = Window:CreateTab("👤 User")
 local HealthSection = UserTab:CreateSection("❤️ Health") -- health section
-
+local Button = UserTab:CreateButton({
+    Name = "💀 Reset",
+    Callback = function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Reset"):FireServer()
+    end,
+})
 local HungerSection = UserTab:CreateSection("🍽️ Hunger") -- hunger section
 
 local AvatarSection = UserTab:CreateSection("🤵 Avatar") -- hunger section
@@ -335,10 +340,11 @@ local maxFuelButton = VehicleTab:CreateButton({
             local vehicleName, ARV = getVehicleNameAndARV()
             local args = {
                 [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
-                [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV):WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+                [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV)
+                :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
                 [3] = 10
             }
-            
+
             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StoreFuel"):FireServer(unpack(args))
 
             Rayfield:Notify({
@@ -353,7 +359,7 @@ local maxFuelButton = VehicleTab:CreateButton({
                 Content = "Get in a vehicle to use this function",
                 Duration = getgenv().NotificationlengthValue,
                 Image = "circle-alert",
-             })
+            })
         end
     end,
 })
@@ -366,10 +372,11 @@ local noFuelButton = VehicleTab:CreateButton({
             local vehicleName, ARV = getVehicleNameAndARV()
             local args = {
                 [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
-                [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV):WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+                [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV)
+                :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
                 [3] = 0
             }
-            
+
             game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StoreFuel"):FireServer(unpack(args))
 
             Rayfield:Notify({
@@ -384,14 +391,14 @@ local noFuelButton = VehicleTab:CreateButton({
                 Content = "Get in a vehicle to use this function",
                 Duration = getgenv().NotificationlengthValue,
                 Image = "circle-alert",
-             })
+            })
         end
     end,
 })
 
 local fuelslider = VehicleTab:CreateSlider({
     Name = "🔧 Adjust Fuel",
-    Range = {0, 10},
+    Range = { 0, 10 },
     Increment = 0.1,
     Suffix = "Fuel Level (/10)",
     CurrentValue = 10,
@@ -400,13 +407,14 @@ local fuelslider = VehicleTab:CreateSlider({
         local vehicleName, ARV = getVehicleNameAndARV()
         local args = {
             [1] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName),
-            [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV):WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
+            [2] = workspace:WaitForChild("Vehicles"):WaitForChild(vehicleName):WaitForChild("Body"):WaitForChild(ARV)
+            :WaitForChild("VehicleSeat"):WaitForChild("CurrentFuel"),
             [3] = Value
         }
-        
+
         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StoreFuel"):FireServer(unpack(args))
     end,
- })
+})
 
 local VehicleLockSection = VehicleTab:CreateSection("🔑 Lock Controls")
 
@@ -441,6 +449,19 @@ local LockVehicleButton = VehicleTab:CreateButton({
         end
     end,
 })
+
+
+-- fund tab
+local FundsTab = Window:CreateTab("💸 Funds")
+local QuickJobsSection = FundsTab:CreateSection("💵 Quick Jobs")
+
+local VehicleTheftButton = FundsTab:CreateButton({
+    Name = "🥷 Vehicle Theft",
+    Callback = function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("VehicleTheftTaskGenerator"):FireServer()
+    end,
+})
+
 -- system tab
 local SystemTab = Window:CreateTab("🖥️ System")
 local SystemControls = SystemTab:CreateSection("⚙️ System Controls")
@@ -454,7 +475,7 @@ local Button = SystemTab:CreateButton({
 
 local NotificationLengthSlider = SystemTab:CreateSlider({
     Name = "🎛️ Adjust Notification Length",
-    Range = {0, 10},
+    Range = { 0, 10 },
     Increment = 0.1,
     Suffix = "(Seconds)",
     CurrentValue = 3.5,
@@ -462,7 +483,7 @@ local NotificationLengthSlider = SystemTab:CreateSlider({
     Callback = function(Value)
         getgenv().NotificationlengthValue = Value
     end,
- })
+})
 
 -- Development Section
 -- I will test functions here
