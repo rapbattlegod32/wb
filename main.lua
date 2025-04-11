@@ -463,7 +463,7 @@ local inputBeganConnection
 local inputEndedConnection
 
 local StrongerBrakeToggle = VehicleTab:CreateToggle({
-    Name = "Stronger Brakes",
+    Name = "🦾 Stronger Brakes",
     CurrentValue = false,
     Flag = "StrongerBrakes",
     Callback = function(Value)
@@ -496,6 +496,31 @@ local StrongerBrakeToggle = VehicleTab:CreateToggle({
                 secureprint("InputEnded connection disconnected")
             end
         end
+    end,
+})
+
+local SpawnVehicleSection = VehicleTab:CreateSection("🛣️ Spawn Vehicle")
+
+local vehicleDropdown = VehicleTab:CreateDropdown({
+    Name = "📜 Select Vehicle",
+    Options = {"Option 1","Option 2"},
+    CurrentOption = {"Option 1"},
+    MultipleOptions = false,
+    Flag = "selectVehicleDropdown", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Options)
+        secureprint(Options)
+    end,
+})
+
+local VehicleSpawnButton = VehicleTab:CreateButton({
+    Name = "🚗 Spawn Vehicle",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "Selected Vehicle",
+            Content = vehicleDropdown.CurrentOption,
+            Duration = getgenv().NotificationlengthValue,
+            Image = "car-front",
+        })
     end,
 })
 
