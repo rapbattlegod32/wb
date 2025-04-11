@@ -2,35 +2,35 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
     Name = "Westbridge Script",
-    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+    Icon = 0,
     LoadingTitle = "giga.ae Hub",
     LoadingSubtitle = "by giga.ae",
-    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+    Theme = "Default",
 
     DisableRayfieldPrompts = false,
-    DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+    DisableBuildWarnings = false,
 
     ConfigurationSaving = {
         Enabled = false,
-        FolderName = nil, -- Create a custom folder for your hub/game
+        FolderName = nil,
         FileName = "giga.aeHub"
     },
 
     Discord = {
-        Enabled = false,       -- Prompt the user to join your Discord server if their executor supports it
-        Invite = "e3knAyNqvR", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-        RememberJoins = true   -- Set this to false to make them join the discord every time they load it up
+        Enabled = false,
+        Invite = "e3knAyNqvR",
+        RememberJoins = true
     },
 
-    KeySystem = false, -- Set this to true to use our key system
+    KeySystem = false,
     KeySettings = {
         Title = "Untitled",
         Subtitle = "Key System",
-        Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-        FileName = "Key",                                    -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-        SaveKey = true,                                      -- The user's key will be saved, but if you change the key, they will be unable to use your script
-        GrabKeyFromSite = false,                             -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-        Key = { "Hello" }                                    -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+        Note = "No method of obtaining the key is provided",
+        FileName = "Key",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = { "Hello" }
     }
 })
 
@@ -119,22 +119,22 @@ local function ClientVehicleExistNotification()
 end
 
 -- main tab
-local MainTab = Window:CreateTab("🏡 Home", nil) -- Title, Image
+local MainTab = Window:CreateTab("🏡 Home", nil)
 local FinancialInfoSection = MainTab:CreateSection("💸 Financial Info")
 
 -- money label
 local guimoney = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.Balance
-local moneylabel = MainTab:CreateLabel(guimoney.Text, "pound-sterling", false) -- Title, Icon, Color, IgnoreTheme
+local moneylabel = MainTab:CreateLabel(guimoney.Text, "pound-sterling", false)
 guimoney:GetPropertyChangedSignal("Text"):Connect(function()
-    moneylabel:Set(guimoney.Text, "pound-sterling", false)                     -- Title, Icon, Color, IgnoreTheme
+    moneylabel:Set(guimoney.Text, "pound-sterling", false)
 end)
 
 local StatusInfoSection = MainTab:CreateSection("❤️ Status")
 -- health label
 local healthbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.HealthBar.Bar
-local healthbar_size = math.floor(healthbar.Size.X.Scale * 100)                 -- Convert to whole number
-local formatted_health = string.format("%03d", healthbar_size)                  -- Format as 3-digit
-local healthlabel = MainTab:CreateLabel(formatted_health, "heart-pulse", false) -- Title, Icon, Color, IgnoreTheme
+local healthbar_size = math.floor(healthbar.Size.X.Scale * 100)
+local formatted_health = string.format("%03d", healthbar_size)
+local healthlabel = MainTab:CreateLabel(formatted_health, "heart-pulse", false)
 healthbar:GetPropertyChangedSignal("Size"):Connect(function()
     local healthbar_size = math.floor(healthbar.Size.X.Scale * 100)
     local formatted_health = string.format("%03d", healthbar_size)
@@ -143,9 +143,9 @@ end)
 
 -- hunger label
 local hungerbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.HungerBar.Bar
-local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100)              -- Convert to whole number
-local formatted_hunger = string.format("%03d", hungerbar_size)               -- Format as 3-digit
-local hungerlabel = MainTab:CreateLabel(formatted_hunger, "utensils", false) -- Title, Icon, Color, IgnoreTheme
+local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100)
+local formatted_hunger = string.format("%03d", hungerbar_size)
+local hungerlabel = MainTab:CreateLabel(formatted_hunger, "utensils", false)
 hungerbar:GetPropertyChangedSignal("Size"):Connect(function()
     local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100)
     local formatted_hunger = string.format("%03d", hungerbar_size)
@@ -157,13 +157,11 @@ local TeamInfoSection = MainTab:CreateSection("🧑‍💼 Occupation")
 local team = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUIContainer.Profile.Team
 local teamlabel = MainTab:CreateLabel(team.Text, "users-round", false)
 team:GetPropertyChangedSignal("Text"):Connect(function()
-    teamlabel:Set(team.Text, "users-round", false) -- Title, Icon, Color, IgnoreTheme
+    teamlabel:Set(team.Text, "users-round", false)
 end)
 
 
 local PlayerCountInfoSection = MainTab:CreateSection("🌐 Current Population")
--- player count label
--- Get the Players service
 local Players = game:GetService("Players")
 
 -- Initial player count
@@ -180,8 +178,7 @@ updatePlayerCount()
 game.Players.PlayerAdded:Connect(updatePlayerCount)
 game.Players.PlayerRemoving:Connect(updatePlayerCount)
 
--- civ/police/ambulance/fire/repair online label
-local Teams = game:GetService("Teams") -- Define the Teams Service
+local Teams = game:GetService("Teams")
 
 -- Initialize teamcountlabel
 local teamcountlabel = MainTab:CreateLabel("Initializing...", "scroll-text", false)
@@ -232,7 +229,7 @@ local adminsoffline = 0
 
 -- Create the admin online label
 local adminonlinestring = "Administrators: " .. adminsonline
-local adminonlinelabel = MainTab:CreateLabel(adminonlinestring, "shield-half", false) -- Title, Icon, Color, IgnoreTheme
+local adminonlinelabel = MainTab:CreateLabel(adminonlinestring, "shield-half", false)
 
 -- Function to update the admin counts and info
 local function updateAdminCounts()
@@ -299,7 +296,6 @@ Players.PlayerRemoving:Connect(function(player)
     end
 end)
 
--- user/profile tab
 local UserTab = Window:CreateTab("👤 User")
 local HealthSection = UserTab:CreateSection("❤️ Health") -- health section
 local Button = UserTab:CreateButton({
@@ -311,7 +307,6 @@ local Button = UserTab:CreateButton({
 local HungerSection = UserTab:CreateSection("🍽️ Hunger") -- hunger section
 
 local AvatarSection = UserTab:CreateSection("🤵 Avatar") -- hunger section
--- met helmet
 local Button = UserTab:CreateButton({
     Name = "👮 MET Helmet",
     Callback = function()
@@ -333,7 +328,6 @@ local Button = UserTab:CreateButton({
     end,
 })
 
--- vehicle tab
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
 
@@ -407,7 +401,7 @@ local fuelslider = VehicleTab:CreateSlider({
     Increment = 0.1,
     Suffix = "Fuel Level (/10)",
     CurrentValue = 10,
-    Flag = "fuelslider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "fuelslider",
     Callback = function(Value)
         local vehicleName, ARV = getVehicleNameAndARV()
         local args = {
@@ -506,7 +500,7 @@ local vehicleDropdown = VehicleTab:CreateDropdown({
     Options = {"Option 1","Option 2"},
     CurrentOption = {"Option 1"},
     MultipleOptions = false,
-    Flag = "selectVehicleDropdown", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "selectVehicleDropdown",
     Callback = function(Options)
         secureprint(Options)
     end,
@@ -553,7 +547,7 @@ local NotificationLengthSlider = SystemTab:CreateSlider({
     Increment = 0.1,
     Suffix = "(Seconds)",
     CurrentValue = 3.5,
-    Flag = "NotificationLengthSlider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "NotificationLengthSlider",
     Callback = function(Value)
         getgenv().NotificationlengthValue = Value
     end,
