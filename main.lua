@@ -1,4 +1,4 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua'))()
 
 local Window = Rayfield:CreateWindow({
     Name = "Westbridge Script",
@@ -527,6 +527,23 @@ local VehicleTheftButton = FundsTab:CreateButton({
     Name = "🥷 Vehicle Theft",
     Callback = function()
         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("VehicleTheftTaskGenerator"):FireServer()
+    end,
+})
+
+-- RCS
+local RoadsideCargoSolutionsSectionSection = FundsTab:CreateSection("🚚 Roadside Cargo Solutions")
+
+local RCSBeginDeliveryButton = FundsTab:CreateButton({
+    Name = "▶️ Begin Delivery",
+    Callback = function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("BeginDelivery"):FireServer()
+    end,
+})
+
+local RCSTakeCargoButton = FundsTab:CreateButton({
+    Name = "📦 Collect Delivery",
+    Callback = function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("CollectDelivery"):FireServer()
     end,
 })
 
