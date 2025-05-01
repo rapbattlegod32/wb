@@ -356,6 +356,19 @@ local DisableDamageBlur = UserTab:CreateButton({
     end
 })
 
+local MaxZoomSlider = UserTab:CreateSlider({
+    Name = "🔧 Max Zoom",
+    Range = { 0, 3000 },
+    Increment = 5,
+    Suffix = "Max Zoom Level (/3000)",
+    CurrentValue = 60,
+    Flag = "maxzoomslider",
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
+        player.CameraMaxZoomDistance = Value
+    end,
+})
+
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
 
