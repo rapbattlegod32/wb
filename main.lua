@@ -333,7 +333,7 @@ local CameraSection = UserTab:CreateSection("📹 Camera")
 local DisableDamageBlur = UserTab:CreateButton({
     Name = "🩸 Disable/Enable Damage Blur",
     Callback = function()
-        local damageBlur = workspace.Camera.damageBlur
+        local damageBlur = workspace.Camera:FindFirstChild("damageBlur")
         if damageBlur then
             if damageBlur.Enabled == true then
                 damageBlur.Enabled = false
@@ -352,6 +352,13 @@ local DisableDamageBlur = UserTab:CreateButton({
                     Image = "circle-alert",
                 })
             end
+        else
+            Rayfield:Notify({
+                Title = "damageBlur",
+                Content = "damageBlur doesn't exist right now",
+                Duration = getgenv().NotificationlengthValue,
+                Image = "circle-alert",
+            })
         end
     end
 })
