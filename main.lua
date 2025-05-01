@@ -369,6 +369,19 @@ local MaxZoomSlider = UserTab:CreateSlider({
     end,
 })
 
+local FieldOfViewSlider = UserTab:CreateSlider({
+    Name = "📷 Field Of View",
+    Range = { 0, 120 },
+    Increment = 1,
+    Suffix = "Field Of View (/120)",
+    CurrentValue = 70,
+    Flag = "fieldofview",
+    Callback = function(Value)
+        local Camera = workspace.CurrentCamera
+        Camera.FieldOfView = Value
+    end,
+})
+
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
 
