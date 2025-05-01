@@ -307,7 +307,7 @@ local Button = UserTab:CreateButton({
 local HungerSection = UserTab:CreateSection("🍽️ Hunger") -- hunger section
 
 local AvatarSection = UserTab:CreateSection("🤵 Avatar") -- hunger section
-local Button = UserTab:CreateButton({
+local MetHelmetButton = UserTab:CreateButton({
     Name = "👮 MET Helmet",
     Callback = function()
         local Players = game:GetService("Players")
@@ -324,6 +324,39 @@ local Button = UserTab:CreateButton({
             firetouchinterest(user, TargetPart, 0)
             task.wait(0.1)
             firetouchinterest(user, TargetPart, 1)
+        end
+    end,
+})
+
+local RACHelmetButton = UserTab:CreateButton({
+    Name = "🛠️ RAC Helmet",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local Workspace = game:GetService("Workspace")
+
+        local Player = Players.LocalPlayer
+        local character = Player.Character or Player.CharacterAdded:Wait()
+
+        local user = character:WaitForChild("LeftLowerLeg")
+        local targetPosition = Vector3.new(-1787.907470703125, 3.2102112770080566, -956.7196044921875)
+        local tolerance = 0.01
+        
+        local function isClose(a, b, tol)
+            return (a - b).Magnitude <= tol
+        end
+        
+        for _, v in pairs(Workspace:GetChildren()) do
+            if v.Name == "Helmet" and v:IsA("Model") then
+                local success, worldPivot = pcall(function() return v.WorldPivot.Position end)
+                if success and isClose(worldPivot, targetPosition, tolerance) then
+                    local TargetPart = v:FindFirstChild("Head")
+                    if TargetPart and user then
+                        firetouchinterest(user, TargetPart, 0)
+                        task.wait(0.1)
+                        firetouchinterest(user, TargetPart, 1)
+                    end
+                end
+            end
         end
     end,
 })
