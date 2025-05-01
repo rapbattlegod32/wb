@@ -361,6 +361,39 @@ local RACHelmetButton = UserTab:CreateButton({
     end,
 })
 
+local AAHelmetButton = UserTab:CreateButton({
+    Name = "🔧 AA Helmet",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local Workspace = game:GetService("Workspace")
+
+        local Player = Players.LocalPlayer
+        local character = Player.Character or Player.CharacterAdded:Wait()
+
+        local user = character:WaitForChild("LeftLowerLeg")
+        local targetPosition = Vector3.new(-546.4539184570312, 2.6551926136016846, -419.2319030761719)
+        local tolerance = 0.01
+        
+        local function isClose(a, b, tol)
+            return (a - b).Magnitude <= tol
+        end
+        
+        for _, v in pairs(Workspace:GetChildren()) do
+            if v.Name == "Helmet" and v:IsA("Model") then
+                local success, worldPivot = pcall(function() return v.WorldPivot.Position end)
+                if success and isClose(worldPivot, targetPosition, tolerance) then
+                    local TargetPart = v:FindFirstChild("Head")
+                    if TargetPart and user then
+                        firetouchinterest(user, TargetPart, 0)
+                        task.wait(0.1)
+                        firetouchinterest(user, TargetPart, 1)
+                    end
+                end
+            end
+        end
+    end,
+})
+
 local CameraSection = UserTab:CreateSection("📹 Camera")
 
 local DisableDamageBlur = UserTab:CreateButton({
