@@ -328,6 +328,34 @@ local Button = UserTab:CreateButton({
     end,
 })
 
+local CameraSection = UserTab:CreateSection("📹 Camera")
+
+local DisableDamageBlur = UserTab:CreateButton({
+    Name = "🩸 Disable/Enable Damage Blur",
+    Callback = function()
+        local damageBlur = workspace.Camera.damageBlur
+        if damageBlur then
+            if damageBlur.Enabled == true then
+                damageBlur.Enabled = false
+                Rayfield:Notify({
+                    Title = "damageBlur",
+                    Content = "Disabled damageBlur",
+                    Duration = getgenv().NotificationlengthValue,
+                    Image = "circle-alert",
+                })
+            elseif damageBlur.Enabled == false then
+                damageBlur.Enabled = true
+                Rayfield:Notify({
+                    Title = "damageBlur",
+                    Content = "Enabled damageBlur",
+                    Duration = getgenv().NotificationlengthValue,
+                    Image = "circle-alert",
+                })
+            end
+        end
+    end
+})
+
 local VehicleTab = Window:CreateTab("🚗 Vehicle")
 local VehicleFuel = VehicleTab:CreateSection("⛽ Fuel")
 
