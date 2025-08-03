@@ -115,12 +115,12 @@ local healthbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUI
 local healthbar_size = math.floor(healthbar.Size.X.Scale * 100)
 local formatted_health = string.format("%03d", healthbar_size)
 local healthlabel = StatusSection:AddLabel({
-    Text = formatted_health,
+    Text = formatted_health .. " health",
 })
 healthbar:GetPropertyChangedSignal("Size"):Connect(function()
     local healthbar_size = math.floor(healthbar.Size.X.Scale * 100)
     local formatted_health = string.format("%03d", healthbar_size)
-    healthlabel:Set(formatted_health)
+    healthlabel:Set(formatted_health .. " health")
 end)
 
 -- hunger label
@@ -128,12 +128,12 @@ local hungerbar = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.GameUI
 local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100)
 local formatted_hunger = string.format("%03d", hungerbar_size)
 local hungerlabel = StatusSection:AddLabel({
-    Text = formatted_hunger,
+    Text = formatted_hunger .. " hunger",
 })
 hungerbar:GetPropertyChangedSignal("Size"):Connect(function()
     local hungerbar_size = math.floor(hungerbar.Size.X.Scale * 100)
     local formatted_hunger = string.format("%03d", hungerbar_size)
-    hungerlabel:Set(formatted_hunger)
+    hungerlabel:Set(formatted_hunger .. " hunger")
 end)
 
 -- TeamInfoSection section
@@ -757,7 +757,7 @@ DevelopmentSection:AddButton({
 })
 
 DevelopmentSection:AddButton({
-    Name = "🔍 Check If Client Vehicle Exists",
+    Name = "🔍 Client Vehicle Exist?",
     Callback = function()
         ClientVehicleExistNotification()
     end
