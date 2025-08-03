@@ -520,7 +520,7 @@ local FuelSection = VehicleTab:CreateSection({
 })
 
 FuelSection:AddButton({
-    Name = "Max Fuel",
+    Name = "🔋 Max Fuel",
     Callback = function()
         local inVehicle = checkIfInVehicle()
         if inVehicle == true then
@@ -548,7 +548,7 @@ FuelSection:AddButton({
 })
 
 FuelSection:AddButton({
-    Name = "No Fuel",
+    Name = "🪫 No Fuel",
     Callback = function()
         local inVehicle = checkIfInVehicle()
         if inVehicle == true then
