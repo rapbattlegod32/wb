@@ -689,11 +689,66 @@ QuickJobsSection:AddButton({
     end
 })
 
+local BankSection = FundsTab:CreateSection({
+    Name = "🏦 Bank",
+    Side = "Right",
+})
+
+BankSection:AddButton({
+    Name = "🪙 Gold Hold Duration",
+    Callback = function()
+        local spawnedGold = workspace.BankRobbery.LimerickBanking.MoneyNodes.Spawned
+
+        for _, goldStack in pairs(spawnedGold:GetChildren()) do
+            local moneyNode = goldStack:FindFirstChild("MoneyNode")
+            if moneyNode then
+                local getGoldPrompt = moneyNode:FindFirstChild("GetGold")
+                if getGoldPrompt and getGoldPrompt:IsA("ProximityPrompt") then
+                    getGoldPrompt.HoldDuration = 0
+                end
+            end
+
+            local positionNode = goldStack:FindFirstChild("PositionNode")
+            if positionNode then
+                local getGoldPrompt = positionNode:FindFirstChild("GetGold")
+                if getGoldPrompt and getGoldPrompt:IsA("ProximityPrompt") then
+                    getGoldPrompt.HoldDuration = 0
+                end
+            end
+        end
+    end
+})
+
+BankSection:AddButton({
+    Name = "🥷 Take All",
+    Callback = function()
+        local spawnedGold = workspace.BankRobbery.LimerickBanking.MoneyNodes.Spawned
+
+        for _, goldStack in pairs(spawnedGold:GetChildren()) do
+            local moneyNode = goldStack:FindFirstChild("MoneyNode")
+            if moneyNode then
+                local getGoldPrompt = moneyNode:FindFirstChild("GetGold")
+                if getGoldPrompt and getGoldPrompt:IsA("ProximityPrompt") then
+                    fireproximityprompt(getGoldPrompt, 10)
+                end
+            end
+            local positionNode = goldStack:FindFirstChild("PositionNode")
+            if positionNode then
+                local getGoldPrompt = positionNode:FindFirstChild("GetGold")
+                if getGoldPrompt and getGoldPrompt:IsA("ProximityPrompt") then
+                    fireproximityprompt(getGoldPrompt, 10)
+                end
+            end
+        end
+    end
+})
+
 -- RCS
 local RoadsideCargoSolutionsSection = FundsTab:CreateSection({
     Name = "🚚 Roadside Cargo Solutions",
     Side = "Left",
 })
+
 
 RoadsideCargoSolutionsSection:AddButton({
     Name = "▶️ Begin Delivery",
