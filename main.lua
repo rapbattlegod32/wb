@@ -276,7 +276,7 @@ Players.PlayerRemoving:Connect(function(player)
     end
 end)
 
--- teams section
+ --teams section
 local TeamCountInfoSection = MainTab:CreateSection({
     Name = "🏢 Team Count",
     Side = "Right",
@@ -289,7 +289,7 @@ local emptyteamcountlabel3 = TeamCountInfoSection:AddLabel({
     Text = " ",
 })
 
--- Initialize teamcountlabel
+ --Initialize teamcountlabel
 local teamcountlabel = TeamCountInfoSection:AddLabel({
     Text = "Initializing...",
 })
@@ -312,10 +312,10 @@ local function updateTeamCounts()
     local londonAmbulanceServiceTeam = Teams["London Ambulance Service"]:GetPlayers()
     local londonFireBrigadeTeam = Teams["London Fire Brigade"]:GetPlayers()
     local racTeam = Teams["RAC"]:GetPlayers()
-    local aATeam = Teams["Automobile Association"]:GetPlayers()
+    local nationalRoadsideServicesTeam = Teams["National Roadside Services"]:GetPlayers()
     local jackboysTeam = Teams["Jackboys"]:GetPlayers()
 
-    local totalRepairTeam = #jackboysTeam + #aATeam + #racTeam
+    local totalRepairTeam = #jackboysTeam + #racTeam + #nationalRoadsideServicesTeam
     local totalPoliceTeam = #metropolitanPoliceServiceTeam + #royalMilitaryPoliceTeam
 
     local teamString = "Civilians: " .. #civTeam ..
@@ -396,39 +396,6 @@ AvatarSection:AddButton({
 
         local user = character:WaitForChild("LeftLowerLeg")
         local targetPosition = Vector3.new(-1787.907470703125, 3.2102112770080566, -956.7196044921875)
-        local tolerance = 0.01
-        
-        local function isClose(a, b, tol)
-            return (a - b).Magnitude <= tol
-        end
-        
-        for _, v in pairs(Workspace:GetChildren()) do
-            if v.Name == "Helmet" and v:IsA("Model") then
-                local success, worldPivot = pcall(function() return v.WorldPivot.Position end)
-                if success and isClose(worldPivot, targetPosition, tolerance) then
-                    local TargetPart = v:FindFirstChild("Head")
-                    if TargetPart and user then
-                        firetouchinterest(user, TargetPart, 0)
-                        task.wait(0.1)
-                        firetouchinterest(user, TargetPart, 1)
-                    end
-                end
-            end
-        end
-    end
-})
-
-AvatarSection:AddButton({
-    Name = "🔧 AA Helmet",
-    Callback = function()
-        local Players = game:GetService("Players")
-        local Workspace = game:GetService("Workspace")
-
-        local Player = Players.LocalPlayer
-        local character = Player.Character or Player.CharacterAdded:Wait()
-
-        local user = character:WaitForChild("LeftLowerLeg")
-        local targetPosition = Vector3.new(-546.4539184570312, 2.6551926136016846, -419.2319030761719)
         local tolerance = 0.01
         
         local function isClose(a, b, tol)
